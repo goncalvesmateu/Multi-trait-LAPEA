@@ -1,0 +1,80 @@
+---
+title: Minicurso Multi-trait LAPEA
+#subtitle: 
+author: "Mateus Gonçalves"
+date: "03/17/2025"
+date-format: "DD/MM/YYYY"
+format:
+  revealjs:
+    title-slide-attributes:
+      class: "no-footer-slide"  # Add a custom class to the title slide
+    css: styles.css
+    logo: lapea_logo.jpeg
+    #width: 600
+    #height: 300
+    self-contained: true
+    scrollable: false
+    theme: default # built-in themes for reveal presentations
+    background-transition: none
+    progress: true # Show a progress bar at the bottom (defaults to true).
+    history: true
+    toc: false
+    transition: slide
+    transition-speed: default
+    highlight-style: github # specify the code highlighting style
+    code-line-numbers: true
+    code-copy: hover
+    controls: auto # navigation arrows per slide
+    touch: true
+    code-fold: false
+    multiplex: false
+    chalkboard: false
+    #slide-level: 2
+    slide-number: true
+    show-slide-number: all
+    callout-appearance: simple
+    previewLinks: true
+editor: visual
+---
+<style>
+.slide-background:first-child {
+  background-color: #081539;
+}
+</style>
+
+
+
+## Outline {.smaller}
+
+-   Background
+-   Multipe trait selection
+
+    - Multistage selection
+
+    - Tandem selection
+    
+    - Independent culling levels
+    
+    - Index selection
+-   Multi-trait models
+
+    -  Mixed models and Uni-trait models, multi-trait models
+
+    - Hands-on in R
+
+# Background
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- Breeders select for multiple traits (morphological,physiological,...);
+
+:::
+
+::: {.column width="50%"}
+
+![wheat](ideotypeWheat.png){width=300}{fig-alt="‘model’ or ideal plant with attributes combined to maximize
+yield."}
+
+:::

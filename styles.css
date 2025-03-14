@@ -1,0 +1,18 @@
+/* Target the YAML title */
+.reveal .slides h1.title {
+  font-size: 1.5em; /* Adjust the size as needed */
+}
+h2.title {
+  font-size: 1.5em; /* Adjust the size as needed */
+}
+
+.no-footer-slide .reveal-footer,
+      .no-footer-slide .slide-number {
+    display: none;}
+    
+.reveal .slide-logo {
+  height: 60px !important;
+  width: 60px !important;
+  max-width: unset !important;
+  max-height: unset !important;
+}
