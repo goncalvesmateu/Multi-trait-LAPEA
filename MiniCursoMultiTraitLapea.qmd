@@ -1,22 +1,25 @@
 ---
-title: Minicurso Multi-trait LAPEA
+title: Minicurso Multi-trait <br> LAPEA
 #subtitle: 
 author: "Mateus Gonçalves"
+bibliography: references.bib
 date: "03/17/2025"
 date-format: "DD/MM/YYYY"
 format:
   revealjs:
+    width: 1600
+    height: 800
     title-slide-attributes:
+      data-background-size: contain
       class: "no-footer-slide"  # Add a custom class to the title slide
     css: styles.css
     logo: lapea_logo.jpeg
-    #width: 600
-    #height: 300
+   # footer: "Code available on #[GitHub](https://github.com/goncalvesmateu/Multi-trait-LAPEA.git)."
     self-contained: true
     scrollable: false
     theme: default # built-in themes for reveal presentations
     background-transition: none
-    progress: true # Show a progress bar at the bottom (defaults to true).
+    progress: false # Show a progress bar at the bottom (defaults to true).
     history: true
     toc: false
     transition: slide
@@ -26,55 +29,244 @@ format:
     code-copy: hover
     controls: auto # navigation arrows per slide
     touch: true
-    code-fold: false
+    code-fold: true
     multiplex: false
     chalkboard: false
-    #slide-level: 2
+    slide-level: 2
+    scroll-view: true
     slide-number: true
     show-slide-number: all
     callout-appearance: simple
-    previewLinks: true
+    preview-links: auto
+    incremental: false
 editor: visual
 ---
-<style>
-.slide-background:first-child {
-  background-color: #081539;
-}
-</style>
 
+## Outline {style="color: #081539"}
 
+::: {style="font-size: 75%;"}
+### Background {style="color:black"}
 
-## Outline {.smaller}
+- [Phenotypic, genetic and environmental correlation]
 
--   Background
--   Multipe trait selection
+- [Direct and indirect selection]
 
-    - Multistage selection
+### [Multiple trait selection]{style="color:black"}
 
-    - Tandem selection
-    
-    - Independent culling levels
-    
-    - Index selection
--   Multi-trait models
+-   [Multistage selection]
+-   [Tandem selection]
+-   [Independent culling levels]
+-   [Index selection]
 
-    -  Mixed models and Uni-trait models, multi-trait models
+### [Multi-trait models]{style="color:black"}
 
-    - Hands-on in R
-
-# Background
-
-:::: {.columns}
-
-::: {.column width="50%"}
-
-- Breeders select for multiple traits (morphological,physiological,...);
-
+- [Uni-trait model]
+- [Multi-trait model]
+- [Hands-on using R]
 :::
 
-::: {.column width="50%"}
+## Background 
 
-![wheat](ideotypeWheat.png){width=300}{fig-alt="‘model’ or ideal plant with attributes combined to maximize
-yield."}
+::: {layout="[ 0.8, -0.3, 0.5 ]"}
 
+-   Breeders select for multiple traits (morphological, physiological, disease resistance...)
+
+-   The list of traits can be endless
+Depending on the program or project goals, one of three types of multiple-trait selection can be employed. A brief description of these types follows.
+
+
+![**Fig 1**. *Model or ideal plant with attributes <br> combined to maximize yield* <br> [@furbank2019field].](ideotypeWheat.png){fig-align="left"}
 :::
+
+## Phenotypic, genetic and environmental correlation {style="font-size: 90%;"}
+
+
+## Direct and indirect selection
+
+
+
+## Multiple trait selection {.center}
+
+One of three types of multiple-trait selection can be employed... 
+
+## Multistage selection
+
+Multistage selection: Selection for different traits at different stages during cultivar development.
+
+```{r fig.align='center', fig.cap=""}
+
+set.seed(1234)
+x <- rnorm(200, mean = 10, sd = 4)
+y <- rnorm(200, mean = 6, sd = 2)
+
+dat <- data.frame(x,y)
+
+# Visualize the scatter plot of traits A and B
+plot(x,y, pch=19, ylim = c(min(dat$y), max(dat$y)),xlim = c(min(dat$x), max(dat$x)),
+     rect(par("usr")[1], par("usr")[3],
+          par("usr")[2], par("usr")[4], col = "lightgrey"),
+     cex.lab=1.5, cex.axis=1.5,
+     xlab="Trait A", ylab="Trait B",col=ifelse(x > 10 & y >5, 'red', 'blue'))
+abline(v=10, h=5, col="black", lwd = 2, lty = 2)
+
+```
+
+## Tandem selection
+
+Selection for one trait until that trait is improved, then for a second, etc., until finally each has been improved to the desired level.
+
+```{r fig.align='center', fig.cap=""}
+
+set.seed(1234)
+x <- rnorm(200, mean = 10, sd = 4)
+y <- rnorm(200, mean = 6, sd = 2)
+
+dat <- data.frame(x,y)
+
+# Visualize the scatter plot of traits A and B
+plot(x,y, pch=19, ylim = c(min(dat$y), max(dat$y)),xlim = c(min(dat$x), max(dat$x)),
+     rect(par("usr")[1], par("usr")[3],
+          par("usr")[2], par("usr")[4], col = "lightgrey"),
+     cex.lab=1.5, cex.axis=1.5,
+     xlab="Trait A", ylab="Trait B",col=ifelse(x > 10 & y >5, 'red', 'blue'))
+abline(v=10, h=5, col="black", lwd = 2, lty = 2)
+
+```
+
+## Independent culling levels
+
+A certain level of merit is established for each trait, and all individuals below that level are discarded regardless of values for other traits.
+
+```{r fig.align='center', fig.cap=""}
+
+set.seed(1234)
+x <- rnorm(200, mean = 10, sd = 4)
+y <- rnorm(200, mean = 6, sd = 2)
+
+dat <- data.frame(x,y)
+
+# Visualize the scatter plot of traits A and B
+plot(x,y, pch=19, ylim = c(min(dat$y), max(dat$y)),xlim = c(min(dat$x), max(dat$x)),
+     rect(par("usr")[1], par("usr")[3],
+          par("usr")[2], par("usr")[4], col = "lightgrey"),
+     cex.lab=1.5, cex.axis=1.5,
+     xlab="Trait A", ylab="Trait B",col=ifelse(x > 10 & y >5, 'red', 'blue'))
+abline(v=10, h=5, col="black", lwd = 2, lty = 2)
+
+```
+
+## Index selection
+
+Select for all traits simultaneously by using some index of net merit.
+
+```{r fig.align='center', fig.cap=""}
+
+set.seed(1234)
+x <- rnorm(200, mean = 10, sd = 4)
+y <- rnorm(200, mean = 6, sd = 2)
+
+dat <- data.frame(x,y)
+
+# Visualize the scatter plot of traits A and B
+plot(x,y, pch=19, ylim = c(min(dat$y), max(dat$y)),xlim = c(min(dat$x), max(dat$x)),
+     rect(par("usr")[1], par("usr")[3],
+          par("usr")[2], par("usr")[4], col = "lightgrey"),
+     cex.lab=1.5, cex.axis=1.5,
+     xlab="Trait A", ylab="Trait B",col=ifelse(x > 10 & y >5, 'red', 'blue'))
+abline(v=10, h=5, col="black", lwd = 2, lty = 2)
+
+```
+
+## Another slide 3
+
+::: columns
+::: {.column width="40%"}
+``` tex
+\begin{gather*}
+a_1=b_1+c_1\\
+a_2=b_2+c_2-d_2+e_2
+\end{gather*}
+
+\begin{align}
+a_{11}& =b_{11}&
+  a_{12}& =b_{12}\\
+a_{21}& =b_{21}&
+  a_{22}& =b_{22}+c_{22}
+\end{align}
+```
+:::
+
+::: {.column width="60%"}
+```{=tex}
+\begin{gather*}
+a_1=b_1+c_1\\
+a_2=b_2+c_2-d_2+e_2
+\end{gather*}
+```
+```{=tex}
+\begin{align}
+a_{11}& =b_{11}&
+  a_{12}& =b_{12}\\
+a_{21}& =b_{21}&
+  a_{22}& =b_{22}+c_{22}
+\end{align}
+```
+:::
+:::
+
+## Uni-trait model
+
+
+$$
+y = Xb + Zu + e
+$$
+
+
+## Multi-trait model
+
+
+\begin{gather*}
+y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2
+\end{gather*}
+
+\begin{align}
+
+\begin{bmatrix}
+   y_{1} \\
+   y_{2} \\
+   \end{bmatrix} = 
+   
+   \begin{bmatrix}
+   X_{1} & 0 \\
+   0 & X_{2} \\
+   \end{bmatrix} \begin{bmatrix}
+   b_{1} \\
+   b_{2} \\
+   \end{bmatrix} +
+   
+    \begin{bmatrix}
+   Z_{1} & 0 \\
+   0 & Z_{2} \\
+   \end{bmatrix}\begin{bmatrix}
+   u_{1} \\
+   u_{2} \\
+   \end{bmatrix} +
+   
+   \begin{bmatrix}
+   e_{1} \\
+   e_{2} \\
+   \end{bmatrix}
+   
+\end{align}
+
+## Advantages
+
+
+## Hands-on using R
+
+
+-   [Material on GitHub](https://github.com/goncalvesmateu/Multi-trait-LAPEA)
+
+
+
+## References

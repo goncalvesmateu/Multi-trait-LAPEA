@@ -1,18 +1,19 @@
-/* Target the YAML title */
-.reveal .slides h1.title {
-  font-size: 1.5em; /* Adjust the size as needed */
-}
-h2.title {
-  font-size: 1.5em; /* Adjust the size as needed */
+.reveal h1 {
+  font-size: 3em;  
 }
 
-.no-footer-slide .reveal-footer,
-      .no-footer-slide .slide-number {
-    display: none;}
-    
+.reveal h2 {
+  font-size: 2em;  
+}
+
 .reveal .slide-logo {
   height: 60px !important;
   width: 60px !important;
   max-width: unset !important;
   max-height: unset !important;
+}
+
+
+.slide-background:first-child {
+  background-color: #081539 !important;
 }

@@ -1,0 +1,49 @@
+---
+title: Minicurso Multi-trait <br> LAPEA
+author: "Mateus Gonçalves"
+bibliography: references.bib
+date: "03/17/2025"
+date-format: "DD/MM/YYYY"
+format:
+  revealjs:
+    css: styles.css
+    logo: lapea_logo.jpeg
+   # footer: "Code available on #[GitHub](https://github.com/goncalvesmateu/Multi-trait-LAPEA.git)."
+    self-contained: true
+    scrollable: false
+    theme: default # built-in themes for reveal presentations
+    background-transition: none
+    progress: false # Show a progress bar at the bottom (defaults to true).
+    history: true
+    toc: false
+    transition: slide
+    transition-speed: default
+    highlight-style: github # specify the code highlighting style
+    code-line-numbers: true
+    code-copy: hover
+    controls: auto # navigation arrows per slide
+    touch: true
+    code-fold: false
+    multiplex: false
+    chalkboard: false
+    slide-level: 2
+    scroll-view: true
+    slide-number: true
+    show-slide-number: all
+    callout-appearance: simple
+    previewLinks: true
+editor: visual
+---
+<style>
+.slide-background:first-child {
+  background-color: #081539;
+}
+</style>
+
+## Background {.layout-full}
+
+::: {layout="[ 0.55, -0.05, 0.4 ]"}
+-   Breeders select for multiple traits (morphological,physiological,...);
+
+![*Fig 1. Model or ideal plant with attributes combined to maximize yield* [@furbank2019field].](ideotypeWheat.png){fig-align="right"}
+:::
