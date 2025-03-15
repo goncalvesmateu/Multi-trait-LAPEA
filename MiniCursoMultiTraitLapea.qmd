@@ -42,10 +42,10 @@ format:
 editor: visual
 ---
 
-## Outline{style="color: #081539"}
+## Outline
 
 ::: {style="font-size: 75%;"}
-### [Background]{style="color:black"}
+### [Background] {style="color:black"}
 
 - [Phenotypic, genetic and environmental correlation]
 
@@ -79,6 +79,8 @@ Depending on the program or project goals, one of three types of multiple-trait 
 :::
 
 ## Phenotypic, genetic and environmental correlation {style="font-size: 90%;"}
+
+
 
 
 ## Direct and indirect selection
