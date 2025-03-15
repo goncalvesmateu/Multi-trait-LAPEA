@@ -13,7 +13,7 @@ format:
       data-background-size: contain
       class: "no-footer-slide"  # Add a custom class to the title slide
     css: styles.css
-    logo: lapea_logo.jpeg
+    logo: Images\lapea_logo.jpeg
    # footer: "Code available on #[GitHub](https://github.com/goncalvesmateu/Multi-trait-LAPEA.git)."
     self-contained: true
     scrollable: false
@@ -75,7 +75,7 @@ editor: visual
 Depending on the program or project goals, one of three types of multiple-trait selection can be employed. A brief description of these types follows.
 
 
-![**Fig 1**. *Model or ideal plant with attributes <br> combined to maximize yield* <br> [@furbank2019field].](ideotypeWheat.png){fig-align="left"}
+![**Fig 1**. *Model or ideal plant with attributes <br> combined to maximize yield* <br> [@furbank2019field].](Images\ideotypeWheat.png){fig-align="left"}
 :::
 
 ## Phenotypic, genetic and environmental correlation {style="font-size: 90%;"}
