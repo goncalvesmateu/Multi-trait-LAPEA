@@ -42,23 +42,23 @@ format:
 editor: visual
 ---
 
-## Outline {style="color: #081539"}
+## Outline{style="color: #081539"}
 
 ::: {style="font-size: 75%;"}
-### Background {style="color:black"}
+### [Background]{style="color:black"}
 
 - [Phenotypic, genetic and environmental correlation]
 
 - [Direct and indirect selection]
 
-### [Multiple trait selection]{style="color:black"}
+### [Multiple trait selection] {style="color:black"}
 
 -   [Multistage selection]
 -   [Tandem selection]
 -   [Independent culling levels]
 -   [Index selection]
 
-### [Multi-trait models]{style="color:black"}
+### [Multi-trait model] {style="color:black"}
 
 - [Uni-trait model]
 - [Multi-trait model]
@@ -87,7 +87,7 @@ Depending on the program or project goals, one of three types of multiple-trait 
 
 ## Multiple trait selection {.center}
 
-One of three types of multiple-trait selection can be employed... 
+Examples of multiple-trait selection strategies can be employed... 
 
 ## Multistage selection
 
@@ -264,9 +264,10 @@ y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2
 
 ## Hands-on using R
 
-
 -   [Material on GitHub](https://github.com/goncalvesmateu/Multi-trait-LAPEA)
 
-
+``` tex
+ Installing packages
+```
 
 ## References
