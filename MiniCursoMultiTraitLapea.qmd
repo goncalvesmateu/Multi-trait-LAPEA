@@ -1,5 +1,5 @@
 ---
-title: Minicurso Multi-trait <br> LAPEA
+title: Short course Multi-trait <br> LAPEA
 #subtitle: 
 author: "Mateus Gonçalves"
 bibliography: references.bib
@@ -261,14 +261,43 @@ a_{21}& =b_{21}&
 
 ## Uni-trait model
 
+The BLUP methodology uses mixed models for the genetic analysis and provides accurate and least biased prediction of breeding values.
+
 ### Mixed model formulation 
 $$
 y = Xb + Zu + e
 $$
 
-#### Advantages
+::: {layout="[ 0.5, -0.05, 0.5 ]"}
+$y$: is the vector of observations (phenotypes) <br> 
+$b$ is the vector with fixed effects with design matrix  <br>
+$u$ is the vector with random effects with design matrix <br>
+$X$ and $Z$ are design matrices relating obs to fixed and random effects, respectively.
 
--  
+\begin{align}
+a_{11}& =b_{11}&
+  a_{12}& =b_{12}\\
+a_{21}& =b_{21}&
+  a_{22}& =b_{22}+c_{22}
+\end{align}
+:::
+
+## Advantages
+
+- It handles missing data
+
+## Advantages
+
+Furthermore, it can be extended to incorporate/account for more complicated effects, such as:
+
+- Interaction terms (e.g GXE)
+
+- Covariance and correlation structures (relationship matrices and Correlation matrices)
+
+- Heterogeneous variances
+
+- Correlated traits
+
 
 ## Multi-trait model
 
@@ -316,7 +345,7 @@ y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2
 ::: {.column width="40%"}
 - [Chapter 5](https://link.springer.com/chapter/10.1007/978-3-030-89010-0_5#Abs1)
 
-![[@montesinos2022multivariate]](Images\bookmulti.jpg){width=70%}
+![[@montesinos2022multivariate]](Images\bookmulti.jpg){width=55%}
 :::
 
 ::: {.column width="60%"}
