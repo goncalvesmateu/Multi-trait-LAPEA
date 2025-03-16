@@ -82,8 +82,7 @@ Depending on the program or project goals, one of three types of multiple-trait 
 ## Phenotypic, genetic and environmental correlation {style="font-size: 90%;"}
 
 
-```{mermaid}
-%%| fig-width: 6.5
+```{mermaid}{fig-width: 10.5}
 flowchart LR
   A[Hard edge] --> B(Round edge)
   B --> C{Decision}
@@ -94,7 +93,15 @@ flowchart LR
 
 ## Genetic correlation
 
-{{ < video https://iastate.pressbooks.pub/app/plugins/h5p/h5p-php-library/js/h5p-resizer.js > }}
+Genes located on the same chromosome are genetically linked. Genetic linkage analysis can be used to determine the order of genes on chromosomes. Closely linked genes are not segregating independently, like genes located on different chromosomes. This has different implications, e.g., in relation to trait correlations
+
+$$
+\text{Classes} =  \begin{cases}
+               \bar{c} - (\tau)  sd(c) < \hat{c}_v < \bar{c} + (\tau)  sd(c) \rightarrow \text{Homoeostatic} \\ 
+                \hat{c}_v > \bar{c} + (\tau) sd(c) \rightarrow \text{Sensitive} \\ 
+                \hat{c}_v < \bar{c} - (\tau)  sd(c) \rightarrow \text{Aggresive}               
+            \end{cases}
+$$
 
 ## Direct and indirect selection
 
@@ -106,28 +113,25 @@ In indirect selection, the criteria is based on traits that may be associated wi
 grain yield such as biomass yield, grain size, number of inflorescences, etc.,
 would be considered indirect selection, and such traits are called **secondary
 traits**. Likewise, selection based on the trait of interest measured in an environment that does not represent the target environment can be considered
-indirect selection: For instance, if the target environment is tropical, grain yield measured in a temperate environment would be considered a secondary trait and selection based on this trait would be considered indirect selection. Genomic selection is a form of indirect selection because selection is based on a genotype and not directly on phenotypic values.
+indirect selection: For instance, if the target environment is tropical, grain yield measured in a temperate environment would be considered a secondary trait and selection based on this trait would be considered indirect selection. 
+
+Genomic selection is a form of indirect selection because selection is based on a genotype and not directly on phenotypic values.
 Indirect selection is often used to eliminate a fraction of the selection
 units prior to selection on the trait of interest especially when the trait of
 interest is expensive to measure. For example, in rice breeding, the cost
 of conducting sensory evaluations to assess grain quality is so high, quality
-can only be measured on relatively few evaluation units. Therefore, to breed
-for good or acceptable quality, rice breeders measure and select based on
-traits which are associated quality such as amylose content.While indirect selection can be a useful. It has been often used ineffectively. For example, U.S. maize breeding in the early 1900s relied on selection based on appearance of the ear judged at “corn shows” (Bowman and
-Crossley, 1908) in attempt to develop better yielding maize varieties. In
-small grain crops, visual selection for yield component traits was often done
-to try to improve grain yield. This strategy has since been shown to be an
-ineffective (McGinnis and Shebeski, 1968; Rasmusson and Cannell, 1970). To determine if indirect selection would be more effective than indirect
-selection, a metric called the relative efficiency can be computed. The relative efficiency of indirect vs. direct selection is simply the ratio of the
-expected genetic gain due to indirect selection to the expected gain due
-to direct selection (Lerner and Cruden, 1947). Assuming the population
+can only be measured on relatively few evaluation units. 
+
+To determine if indirect selection would be more effective than indirect
+selection, a metric called The relative efficiency of indirect vs. direct selection is simply the ratio of the expected genetic gain due to indirect selection to the expected gain due to direct selection (Lerner and Cruden, 1947). 
+
+Assuming the population
 sizes and number of individuals selected is constant, the relative efficiency
 of indirect and direct selection depends the selection accuracy of indirect
 selection as well as the genetic correlation between the indirect and direct
 selection criteria (Fig. 3). For the case of indirect selection based on markers,
 indirect selection accuracy equals one, because a marker genotype is
-completely heritable. In most cases direct selection is more effective than
-indirect selection. When much larger population sizes are possible with indirect selection compared to direct selection, there is a greater chance that
+completely heritable. When much larger population sizes are possible with indirect selection compared to direct selection, there is a greater chance that
 indirect selection would be a more favorable strategy.
 
 ## Multiple trait selection {.center}
@@ -139,6 +143,7 @@ Examples of multiple-trait selection strategies can be employed...
 Multistage selection: Selection for different traits at different stages during cultivar development.
 
 ```{r fig.align='center', fig.cap="", fig.height = 6}
+#| echo: true
 
 set.seed(1234)
 x <- rnorm(200, mean = 10, sd = 4)
@@ -160,7 +165,8 @@ abline(v=10, h=5, col="black", lwd = 2, lty = 2)
 
 Selection for one trait until that trait is improved, then for a second, etc., until finally each has been improved to the desired level.
 
-```{r fig.align='center', fig.cap=""}
+```{r fig.align='center', fig.cap="", fig.height = 6}
+#| echo: true
 
 set.seed(1234)
 x <- rnorm(200, mean = 10, sd = 4)
@@ -182,7 +188,8 @@ abline(v=10, h=5, col="black", lwd = 2, lty = 2)
 
 A certain level of merit (minimun level of performance) is established for each trait, and all individuals below that level are discarded regardless of values for other traits.
 
-```{r fig.align='center', fig.cap=""}
+```{r fig.align='center', fig.cap="", fig.height = 6}
+#| echo: true
 
 set.seed(1234)
 x <- rnorm(200, mean = 10, sd = 4)
@@ -204,7 +211,8 @@ abline(v=10, h=5, col="black", lwd = 2, lty = 2)
 
 Select for all traits simultaneously by using some index of net merit. 
 
-```{r fig.align='center', fig.cap=""}
+```{r fig.align='center', fig.cap="", fig.height = 6}
+#| echo: true
 
 set.seed(1234)
 x <- rnorm(200, mean = 10, sd = 4)
@@ -268,17 +276,16 @@ $$
 y = Xb + Zu + e
 $$
 
-::: {layout="[ 0.5, -0.05, 0.5 ]"}
+::: {layout="[ 0.55, -0.05, 0.45 ]"}
 $y$: is the vector of observations (phenotypes) <br> 
-$b$ is the vector with fixed effects with design matrix  <br>
-$u$ is the vector with random effects with design matrix <br>
-$X$ and $Z$ are design matrices relating obs to fixed and random effects, respectively.
+$b$: is the vector with fixed effects with design matrix  <br>
+$u$: is the vector with random effects with design matrix <br>
+$X$ and $Z$: are design matrices relating obs to fixed and random effects, respectively.
 
 \begin{align}
-a_{11}& =b_{11}&
-  a_{12}& =b_{12}\\
-a_{21}& =b_{21}&
-  a_{22}& =b_{22}+c_{22}
+u \sim N(0,\sigma_{1}) & e \sim N(0,\sigma_{1}) & a_{12}& =b_{12}\\
+E(y) = Xb & var(u)= G&\\
+  var(e)= R & var(y)=ZGZ’ + R
 \end{align}
 :::
 
@@ -338,6 +345,7 @@ y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2
 
 ## Advantages
 
+In this and many other cases, sometimes the interest is to predict traits that are difficult or expensive to measure with those that are easy to measure or the aim can be to improve all these correlated traits simultaneously (Henderson and Quaas 1976; Calus and Veerkamp 2011; Jiang et al. 2015). In these lines, there is evidence of the usefulness of multi-trait modelling. For example, Jia and Jannink (2012) showed that, compared to single-trait modelling, the prediction accuracy of low-heritability traits could be increased by using a multi-trait model when the degree of correlation between traits is at least moderate. They also found that multi-trait models had better prediction accuracy when phenotypes were not available on all individuals and traits. Joint modelling also has been found useful for increasing prediction accuracy when the traits of interest are not measured in the individuals of the testing set, but this and other traits were observed in individuals in the training set (Pszczola et al. 2013).
 
 ## Hands-on using R
 
@@ -368,5 +376,21 @@ y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2
 :::
 
 :::
+
+## Hands-on using R
+
+``` tex
+# rrBLUB (single-trait and no marker information used)
+
+# GBLUP (single-trait with marker information used)
+
+# GBLUP (multi-trait and no marker information used)
+
+# GBLUP (multi-trait with marker information used)
+
+
+
+```
+
 
 ## References

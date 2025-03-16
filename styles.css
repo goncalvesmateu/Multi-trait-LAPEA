@@ -19,3 +19,7 @@
 .slide-background:first-child {
   background-color: #081539 !important;
 }
+
+.justify {
+  text-align: justify !important
+}
