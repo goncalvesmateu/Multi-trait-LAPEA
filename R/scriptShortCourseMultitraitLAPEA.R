@@ -1,10 +1,8 @@
 ################################################################################
 #
-# Script of chapter 5
+# Script of multitrait analysis using sommer
 #
-# Multivariate Statistical machine Learning methods for genomic prediction
-#
-# by Osval Antonio Montesinos López, Abelardo Montesinos López & Jose Crossa 
+# by Mateus Gonçalves
 #
 ################################################################################
 # Installing packages
