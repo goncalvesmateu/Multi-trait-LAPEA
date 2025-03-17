@@ -264,7 +264,7 @@ Select for $n$ traits simultaneously by using some index of net merit:
 $$I = b_{1}X_{1} + b_{1}X_{1} + ... + b_{n}X_{n}$$
 $b_{1}$ is the weight for trait $i$ and $X_{1}$ is the phenotypic value for trait $i$. 
 
-Example adapted from [@bernardo2002breeding]: <br>
+**Example adapted from** [@bernardo2002breeding]: <br>
 Price of 60 kg bag of maize: R$ 90,00 <br>
 To dry a 60 kg bag of maize: R$ 0,25<br>
 Target moisture concentration: 13%
@@ -412,7 +412,7 @@ y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2,.. trait
 
 - The prediction accuracy of low-heritability, difficult, and/or expensive to measure traits can be increased by using multi-trait models when the degree of correlation between traits is at least moderate,  to improve the target trait or all the correlated traits simultaneously [@calus2011accuracy]. 
 
-- Multi-trait models can be useful for increasing prediction accuracy when the traits of interest are not measured in the individuals of the testing set, but were observed in individuals in the training set [@jia2012multiple].
+- Multi-trait models can be useful for increasing prediction accuracy when the traits of interest are not measured in all individuals of the testing set, but were observed in individuals in the training set [@jia2012multiple].
 
 ## Hands-on using R
 

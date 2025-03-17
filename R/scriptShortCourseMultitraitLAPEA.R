@@ -177,7 +177,6 @@ fit$sigma$`u:id`
 ################################################################################
 # Cross-validation Single-trait models (GBLUP) using sommer for Yield and FruitAver
 #30 Replicates
-#30 Replicates
 rep <- 3
 #5 random partitions
 fold <- 5
