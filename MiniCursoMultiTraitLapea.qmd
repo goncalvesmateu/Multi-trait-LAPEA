@@ -119,6 +119,9 @@ $${{COV}_{Pxy}} = {{COV}_{Gxy}} + {{COV}_{Exy}}$$
 
 :::
 
+::: footer
+[Reference @falconer1996introduction]
+:::
 ## Genetic correlation
 
 - Greatest interest for breeders
@@ -138,38 +141,41 @@ The mean genetic change in the trait of interest in a population.
 
 The selection criteria is based on the trait(s) of interest in the target environment. 
 
-::: {layout="[ 0.4, -0.05, 0.6 ]"}
 
-$$Rx = {k}_{p} {h}_{x}{\sigma}_{a}x$$
-$$Ry = {k}_{p} {h}_{y}{\sigma}_{a}y$$
+$$ Rx = {k}_{p} {h}_{x}{\sigma_a}x$$
+$$Ry = {k}_{p} {h}_{y}{\sigma_a}y$$
 
-${k}_{p}$ is the selection differential when the proportion of selected individuals is $p$, ${\sigma}_{a}x$ is the standard deviation of breeding values
+${k}_{p}$: is the selection differential when the proportion of selected individuals is $p$;<br> ${h}$: is the accuracy of individual selection (direct selection);<br> 
+${\sigma_a}$: is the standard deviation of breeding values.
 
+::: footer
+[Reference @falconer1996introduction]
 :::
-  
+
 ## Indirect selection
 
 - The criteria is based on trait(s) that may be associated with the trait(s) of interest (**secondary traits**). [Ex]{style="color:red"}: number of stalks and tons of cane per hectare. Also, the same trait measured in different environments[@rutkoski2019practical]:
 
 ::: {layout="[ 0.5, -0.05, 0.5 ]"}
 
-![**Fig 2**. *Yield of maize in Tropical environment*](Images\cornTrop.jpg){fig-align="center" width=60%}
+![**Fig 2**. *Yield of maize in tropical environment*](Images\cornTrop.jpg){fig-align="center" width=80%}
 
 
-![**Fig 3**. *Yield of maize in temparate environment*](Images\cornTemp.png){fig-align="center" width=60%}
+![**Fig 3**. *Yield of maize in temparate environment*](Images\cornTemp.png){fig-align="center" width=80%}
 :::
-
-- Indirect selection is often used because a secondary trait is easier and/or cheaper to evaluate, and measurable on both sex.
 
 ## Correlated response to selection
 
-- [Correlated response to selection]{style="color:red"}: selection for one trait will cause a correlated response in the other (if genetic correlation exists).
+- [Correlated response to selection]{style="color:red"}: selection for one trait will cause a correlated response in the other (if genetic correlation exists). The expected response of a trait Y, when selection is applied to another trait X:
 
-### Indirect response to selection
+$$CR_{Y} = {k}_{p} {h}_{x} {h}_{y}{r}_{g}\sigma_{p_{Y}}$$
+- Indirect selection is expected to be better than direct selection if the secondary trait has substantially higher heritability, and the genetic correlation is high.
 
-$$Ry = {k}_{p} {h}_{y}{\sigma}_{a}y$$
+- Indirect selection can also be advantageous if much larger population sizes are possible compared to direct selection. Also, if secondary trait is easier and/or cheaper to evaluate, and measurable on both sex for example.
 
-- The superiority of indirect over direct selection depends the heritability of secondary trait and the genetic correlation, and when much larger population sizes are possible with indirect selection compared to direct selection.
+::: footer
+[Reference @falconer1996introduction]
+:::
 
 ## Multiple trait selection {.center}
 
@@ -299,17 +305,10 @@ $$
    \end{bmatrix} 
    ,
    \begin{bmatrix}
-   \mathbf{K} & 0 \\
-   0 & \mathbf{R} \\
+   \sigma_{g}^2 \mathbf{K} & 0 \\
+   0 & \sigma_{e}^2 \mathbf{R} \\
     \end{bmatrix}
    \end{pmatrix}
-\end{align}
-
-\begin{align}
-var(u)& = K&  \\
-var(e)& = R& \\
-var(y)& =ZGZ’ + R \\ 
-E(y)& = Xb&
 \end{align}
 
 ## Advantages
@@ -335,7 +334,7 @@ Furthermore, it can be extended to incorporate/account for more effects, such as
 
 
 \begin{gather*}
-y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2
+y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2,.. trait
 \end{gather*}
 
 \begin{align}
@@ -388,10 +387,10 @@ y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2
 ::: columns 
 ::: {.column width="50%"}
 \begin{align}
-  K =
+  G =
   \left[ {\begin{array}{cc}
-    \sigma_{g_1}^2 & \sigma_{g_12}^2 \\
-    \sigma_{g_21}^2 & \sigma_{g_2}^2 \\
+    \sigma_{g_{11}}^2 & \sigma_{g_{12}}^2 \\
+    \sigma_{g_{21}}^2 & \sigma_{g_{22}}^2 \\
   \end{array} } \right]
 \end{align}
 :::
@@ -400,8 +399,8 @@ y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2
 \begin{align}
   \Sigma =
   \left[ {\begin{array}{cc}
-    \sigma_{e_1}^2 & \sigma_{e_1_2}^2 \\
-    \sigma_{e_2_1}^2 & \sigma_{e_2}^2 \\
+    \sigma_{e_{11}}^2 & \sigma_{e_{12}}^2 \\
+    \sigma_{e_{21}}^2 & \sigma_{e_{22}}^2 \\
   \end{array} } \right]
 \end{align}
 :::
@@ -410,17 +409,20 @@ y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2
 
 ## Advantages
 
-- The prediction accuracy of low-heritability, difficult, and/or expensive to measure traits can be increased by using multi-trait models when the degree of correlation between traits is at least moderate,  to improve the target trait or all the correlated traits simultaneously (Calus and Veerkamp 2011). 
+- The prediction accuracy of low-heritability, difficult, and/or expensive to measure traits can be increased by using multi-trait models when the degree of correlation between traits is at least moderate,  to improve the target trait or all the correlated traits simultaneously [@calus2011accuracy]. 
 
-- Multi-trait models can be useful for increasing prediction accuracy when the traits of interest are not measured in the individuals of the testing set, but this and other traits were observed in individuals in the training set (Pszczola et al. 2013, Jia and Jannink, 2012).
+- Multi-trait models can be useful for increasing prediction accuracy when the traits of interest are not measured in the individuals of the testing set, but were observed in individuals in the training set [@jia2012multiple].
 
 ## Hands-on using R
 
 ::: columns 
 ::: {.column width="40%"}
+
+- [Sommer package](https://github.com/covaruber/sommer)
+
 - [Chapter 5](https://link.springer.com/chapter/10.1007/978-3-030-89010-0_5#Abs1)
 
-![[@montesinos2022multivariate]](Images\bookmulti.jpg){width=55% preview-link="true"}
+![[@montesinos2022multivariate]](Images\bookmulti.jpg){width=50% preview-link="true"}
 :::
 
 ::: {.column width="60%"}
