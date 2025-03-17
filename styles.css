@@ -21,5 +21,10 @@
 }
 
 .justify {
-  text-align: justify !important
+  text-align: justify !important;
 }
+
+
+.img {
+        border: 0 !important;
+    }
