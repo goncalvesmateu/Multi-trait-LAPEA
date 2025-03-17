@@ -143,7 +143,7 @@ The selection criteria is based on the trait(s) of interest in the target enviro
 $$Rx = {k}_{p} {h}_{x}{\sigma}_{a}x$$
 $$Ry = {k}_{p} {h}_{y}{\sigma}_{a}y$$
 
-${k}_{p}$ is the selection differential when the proportion of selcted individuals is $p$
+${k}_{p}$ is the selection differential when the proportion of selected individuals is $p$, ${\sigma}_{a}x$ is the standard deviation of breeding values
 
 :::
   
@@ -368,6 +368,46 @@ y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2
    
 \end{align}
 
+\vspace{2em}
+
+\begin{align}
+
+\begin{bmatrix}
+   u \\
+   e \\
+   \end{bmatrix} \sim MVN
+   
+   \begin{pmatrix}
+   \begin{bmatrix}
+   \mathbf{G}\otimes\mathbf{K} & 0 \\
+   0 &  \mathbf{\Sigma}\otimes{I} \\
+    \end{bmatrix}
+   \end{pmatrix}
+\end{align}
+
+::: columns 
+::: {.column width="50%"}
+\begin{align}
+  K =
+  \left[ {\begin{array}{cc}
+    \sigma_{g_1}^2 & \sigma_{g_12}^2 \\
+    \sigma_{g_21}^2 & \sigma_{g_2}^2 \\
+  \end{array} } \right]
+\end{align}
+:::
+
+::: {.column width="50%"}
+\begin{align}
+  \Sigma =
+  \left[ {\begin{array}{cc}
+    \sigma_{e_1}^2 & \sigma_{e_1_2}^2 \\
+    \sigma_{e_2_1}^2 & \sigma_{e_2}^2 \\
+  \end{array} } \right]
+\end{align}
+:::
+
+::: 
+
 ## Advantages
 
 - The prediction accuracy of low-heritability, difficult, and/or expensive to measure traits can be increased by using multi-trait models when the degree of correlation between traits is at least moderate,  to improve the target trait or all the correlated traits simultaneously (Calus and Veerkamp 2011). 
@@ -410,6 +450,70 @@ y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2
 # rrBLUB (single-trait and no marker information used)
 
 # GBLUP (single-trait with marker information used)
+
+################################################################################
+################################################################################
+# Cross-validation Single-trait models (rrBLUP) using sommer
+# Datasets
+data(DT_cpdata)
+# Phenotypic data
+DT <- DT_cpdata
+head(DT)
+# Removing rows with NAS because is preventing correlation in corss validation 
+DT <- na.omit(DT)
+# Marker data
+GT <- GT_cpdata
+GT_cpdata[1:5,1:5]
+# Chromossome positions
+#MP <- MP_cpdata
+#head(MP_cpdata)
+# Genomic relationship matrix
+A <- A.mat(GT)
+colnames(A) <- rownames(A) <- rownames(DT)
+A[1:5,1:5]
+# Creating new dataset
+data.1.2 <- DT
+# Scaling phenotypes
+data.1.2$Yield <- as.vector(scale(data.1.2$Yield, center = T, scale = T)) # Yield
+data.1.2$FruitAver <- as.vector(scale(data.1.2$FruitAver, center = T, scale = T)) # fruit avarage
+data.1.2$Firmness <- as.vector(scale(data.1.2$Firmness, center = T, scale = T)) # firmness
+data.1.2$color <- as.vector(scale(data.1.2$color, center = T, scale = T)) # color
+######################################################################################
+# Cross-validation Single-trait models (GBLUP) using sommer
+#30 Replicates
+rep <- 3
+#5 random partitions
+fold <- 5
+n <- dim(data.1.2)[1]
+Replicates <- data.frame(Replicate = 1:rep,MSEP = NA,Cor = NA) 
+for (j in 1:rep){ 
+  set.seed(j)
+  Partitions <- replicate(fold,sample(n,0.20*n,replace = F))
+  Table <- data.frame(Partitions = 1:fold,MSEP = NA,Cor = NA)
+  for(i in 1:fold) {
+    tst <- Partitions[,i]
+    data.1.2$y_NA <- data.1.2$Yield
+    data.1.2$y_NA[tst] <- NA
+    #M1
+    fit = mmer(y_NA ~ 1,
+         random=~vsr(id,Gu=A) + vsr(Rowf),
+         rcov=~units,
+         data=data.1.2,verbose = FALSE)
+    #BLUPs
+    bv <- fit$U$`u:id`$y_NA
+    #Prediction of testing
+    yp_tst <- bv[tst]
+    #MSEP and Cor
+    Table$MSEP[i] <- mean((data.1.2$Yield[tst]-yp_tst)^2)
+    Table$Cor[i] <- cor(data.1.2$Yield[tst],yp_tst)
+  }
+  Replicates$MSEP[j] <- mean((na.omit(Table$MSEP))) # mean of folds
+  Replicates$Cor[j] <-mean((na.omit(Table$Cor))) # mean of folds
+}
+
+mean(Replicates$MSEP) # mean of replicates
+mean(Replicates$Cor) # mean of replicates
+######################################################################################
 
 # rrBLUP (multi-trait and no marker information used)
 

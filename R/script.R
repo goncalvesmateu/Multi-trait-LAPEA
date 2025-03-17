@@ -43,11 +43,10 @@ ans.m <- mmer(cbind(Yield,color)~1,
 
 # Now you can extract the BLUPs using randef(ans.m) or simply ans.m$U. Also, genetic 
 # correlations and heritabilities can be calculated easily.
-
 cov2cor(ans.m$sigma$`u:id`)
 
 ################################################################################
-fit an rrBLUP model in the multivariate setting, the DT_cpdata has a good example
+#fit an rrBLUP model in the multivariate setting, the DT_cpdata has a good example
 
 librayr(sommer)
 data(DT_cpdata)
@@ -128,59 +127,90 @@ mod.5 <- mmer(BLUEs_TCHr ~ 1,
 # Narrow-sense heritability
 h25 <- (as.double(mod.5$sigma$`u:Genotype_code`))/(as.double(mod.5$sigma$`u:Genotype_code`) + as.double(mod.5$sigma$`u:units`)); h25 
 sigg5<- as.double(mod.5$sigma_scaled$`u:Genotype_code`)
-##################################################
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+# Cross-validation Single-trait models (rrBLUP) using sommer
+# Datasets
+data(DT_cpdata)
+# Phenotypic data
+DT <- DT_cpdata
+head(DT)
+# Marker data
+GT <- GT_cpdata
+GT_cpdata[1:5,1:5]
+# Chromossome positions
+#MP <- MP_cpdata
+#head(MP_cpdata)
+# Genomic relationship matrix
+G <- A.mat(GT) # additive relationship matrix
+colnames(G) <- rownames(G) <- rownames(DT)
+G[1:5,1:5]
+# Creating new dataset
+data.1.2 <- DT
+# Scaling phenotypes
+data.1.2$Yield <- as.vector(scale(data.1.2$Yield, center = T, scale = T)) # Yield
+data.1.2$FruitAver <- as.vector(scale(data.1.2$FruitAver, center = T, scale = T)) # fruit avarage
+data.1.2$Firmness <- as.vector(scale(data.1.2$Firmness, center = T, scale = T)) # firmness
+data.1.2$color <- as.vector(scale(data.1.2$color, center = T, scale = T)) # color
+######################################################################################
+# Fitting models using sommer package to compute narrow-sense heritability estimates
+# Genomic based  
+mod.1 = mmer(Yield ~ 1,
+              random= ~ vsr(id, Gu=G,Gtc=unsm(1)) + Rowf + Colf,
+              rcov = ~ units,
+              data = data.1.2,verbose = F)
+# Narrow-sense heritability
+h2 <- (as.double(mod.1$sigma$`u:id`))/(as.double(mod.1$sigma$`u:id`)) + (as.double(mod.1$sigma$units)); h2 
+sigg<- as.double(mod.1$sigma_scaled$`u:id`)
 ######################################################################################
 # Cross-validation Single-trait models (GBLUP) using sommer
 #30 Replicates
-rep <- 10
+rep <- 3
 #5 random partitions
 fold <- 5
 n <- dim(data.1.2)[1]
-#set.seed(1)
-#Partitions <- replicate(fold,sample(n,0.20*n)) 
-#Partitions <- replicate(fold,sample(1:fold, size=nrow(G), replace = TRUE))
-#tst <- which(partition == j)
-#Gtest <- G + diag(nrows(G)) * 0.001
 Replicates <- data.frame(Replicate = 1:rep,MSEP = NA,Cor = NA) 
 for (j in 1:rep){ 
   set.seed(j)
   Partitions <- replicate(fold,sample(n,0.20*n,replace = F))
   Table <- data.frame(Partitions = 1:fold,MSEP = NA,Cor = NA)
-  mm <- matrix(3,1,1) #matrix to fix the var comp
   for(i in 1:fold) {
     tst <- Partitions[,i]
-    data.1.2$y_NA <- data.1.2$BLUEs_TCHr
+    data.1.2$y_NA <- data.1.2$Yield
     data.1.2$y_NA[tst] <- NA
-    #M1
-    fit = mmer(y_NA ~ 1,na.method.Y='include2', 
-               random= ~ vs(Genotype_code, Gu=G, Gti= matrix(sigg2), Gtc=mm),
-               rcov= ~ vs(units), data=data.1.2,
-               verbose=F, method = "EMMA", iters= 500)# method = "AI")
+    #Fit model
+    fit = mmer(y_NA ~ 1,
+         random=~vsr(id,Gu=G) + vsr(Rowf),
+         rcov=~units,
+         data=data.1.2,verbose = FALSE)
     #BLUPs
-    bv <- fit$U$`u:Genotype_code`$y_NA
+    bv <- fit$U$`u:id`$y_NA
     #Prediction of testing
     yp_tst <- bv[tst]
     #MSEP and Cor
-    Table$MSEP[i] <- mean((data.1.2$BLUEs_TCHr[tst]-yp_tst)^2)
-    Table$Cor[i] <- cor(data.1.2$BLUEs_TCHr[tst],yp_tst)
+    Table$MSEP[i] <- mean((data.1.2$Yield[tst]-yp_tst)^2)
+    Table$Cor[i] <- cor(data.1.2$Yield[tst],yp_tst)
   }
-  Replicates$MSEP[j] <- mean(Table$MSEP)
-  #Replicates$Cor[j] <-mean((na.omit(Table$Cor)))
-  Replicates$Cor[j] <-mean(Table$Cor)
+  Replicates$MSEP[j] <- mean((na.omit(Table$MSEP))) # mean of folds
+  Replicates$Cor[j] <-mean((na.omit(Table$Cor))) # mean of folds
 }
 
-mean(Replicates$MSEP)
-mean(Replicates$Cor)
+mean(Replicates$MSEP) # mean of replicates
+mean(Replicates$Cor) # mean of replicates
 ######################################################################################
 # Cross-validation Multi-trait models (GBLUP) using sommer: Scenario MT-1
 #30 Replicates
-rep <- 30
+rep <- 3
 #5 random partitions
 fold <- 5
 n <- dim(data.1.2)[1]
 Replicates <- data.frame(Replicate = 1:rep,MSEP_T1 = NA,Cor_T1 = NA,
                          MSEP_T2 = NA,Cor_T2 = NA) 
-mm <- matrix(3,1,1) #matrix to fix the var comp
 
 for (j in 1:rep){ 
   set.seed(j)
@@ -189,19 +219,17 @@ for (j in 1:rep){
                       MSEP_T2 = NA,Cor_T2 = NA)
   for(i in 1:fold) {
     tst <- Partitions[,i]
-    data.1.2$y_NA.1 <- data.1.2$BLUEs_TCHr
+    data.1.2$y_NA.1 <- data.1.2$Yield
     data.1.2$y_NA.1[tst] <- NA
-    data.1.2$y_NA.2 <- data.1.2$BLUEs_SN
+    data.1.2$y_NA.2 <- data.1.2$FruitAver
     data.1.2$y_NA.2[tst] <- NA
-    #data.1.2$y_NA.3 <- data.1.2
-    #data.1.2$y_NA.3[tst] <- NA
-    #M1
-    fit <- mmer(cbind(y_NA.1,y_NA.2)~ 1,#na.method.Y='include2', 
-                random= ~ vs(Genotype_code, Gu=G,Gtc=unsm(2)), #Gti= diag(c(sigg2,sigg8)), Gtc=mm),
-                rcov= ~ vs(units,Gtc=diag(2)), data=data.1.2,
-                verbose=F, method = "AI", iters= 500,tolparinv = 0.5)
+    #Fit model
+    fit <- mmer(cbind(y_NA.1,y_NA.2)~ 1,
+                random= ~ vsr(id, Gu=G,Gtc=unsm(2)),
+                rcov= ~ vsr(units,Gtc=diag(2)), data=data.1.2,
+                verbose=F, method = "AI")
     #BLUPs
-    b_ls <- fit$U$`u:Genotype_code`
+    b_ls <- fit$U$`u:id`
     b_T1 <- b_ls$y_NA.1 # Trait 1
     b_T2 <- b_ls$y_NA.2 # Trait 2
     b_mat <- cbind(b_T1,b_T2)
@@ -218,11 +246,11 @@ for (j in 1:rep){
     y2p_tst = b_mat[tst,2] # Trait 2
     #MSEP and Cor
     #Trait 1
-    Table$MSEP_T1[i] <- mean((data.1.2$BLUEs_TCHr[tst]-yp_tst)^2)
-    Table$Cor_T1[i] <- cor(data.1.2$BLUEs_TCHr[tst],yp_tst)
+    Table$MSEP_T1[i] <- mean((data.1.2$Yield[tst]-yp_tst)^2)
+    Table$Cor_T1[i] <- cor(data.1.2$Yield[tst],yp_tst)
     #Trait 2
-    Table$MSEP_T2[i] <- mean((data.1.2$BLUEs_NRed[tst]-y2p_tst)^2)
-    Table$Cor_T2[i] <- cor(data.1.2$BLUEs_NRed[tst],y2p_tst)
+    Table$MSEP_T2[i] <- mean((data.1.2$FruitAver[tst]-y2p_tst)^2)
+    Table$Cor_T2[i] <- cor(data.1.2$FruitAver[tst],y2p_tst)
   }
   Replicates$MSEP_T1[j] <- mean(Table$MSEP_T1)
   Replicates$Cor_T1[j] <-mean(Table$Cor_T1)
@@ -233,3 +261,139 @@ for (j in 1:rep){
 mean(Replicates$MSEP)
 mean(Replicates$Cor)
 ################################################################################
+#########################################################################
+# DT_example
+data(DT_example)
+DT <- DT_example
+DT$Yield <- as.vector(scale(DT$Yield))
+DT$Weight <- as.vector(scale(DT$Weight))
+# Single
+ans3r <- mmer(Yield ~ 1,
+              random= ~ vsr(Name),
+              rcov= ~ vsr(units),
+              data=DT, verbose = FALSE)
+summary(ans3r)$varcomp
+ans3r$sigma$`u:Name`
+#Multi
+ans4r <- mmer(cbind(Yield, Weight) ~ 1,
+              random= ~ vsr(Name, Gtc=unsm(2)),
+              rcov= ~ vsr(units, Gtc=diag(2)),
+              data=DT, verbose = FALSE)
+summary(ans4r)$varcomp
+ans4r$sigma$`Name`
+######################################################
+# Datasets
+data(DT_cpdata)
+# Phenotypic data
+DT <- DT_cpdata
+head(DT)
+# Marker data
+GT <- GT_cpdata
+GT_cpdata[1:5,1:5]
+# Chromossome positions
+#MP <- MP_cpdata
+#head(MP_cpdata)
+# Genomic relationship matrix
+G <- A.mat(GT) # additive relationship matrix
+#colnames(G) <- rownames(G) <- rownames(DT)
+G[1:5,1:5]
+# Creating new dataset
+data.1.2 <- DT
+# Scaling phenotypes
+data.1.2$Yield <- as.vector(scale(data.1.2$Yield, center = T, scale = T)) # Yield
+data.1.2$FruitAver <- as.vector(scale(data.1.2$FruitAver, center = T, scale = T)) # fruit avarage
+data.1.2$Firmness <- as.vector(scale(data.1.2$Firmness, center = T, scale = T)) # firmness
+data.1.2$color <- as.vector(scale(data.1.2$color, center = T, scale = T)) # color
+##########################################################################################
+# original
+# DT_cpdata
+data(DT_cpdata)
+DT <- DT_cpdata
+head(DT,3)
+GT <- GT_cpdata
+GT[1:5,1:5]
+#### create the variance-covariance matrix
+G <- A.mat(GT) # additive relationship matrix
+DT$Yield <- as.vector(scale(DT$Yield))
+DT$FruitAver <- as.vector(scale(DT$FruitAver))
+data.1.2 <- DT # creating newdataset
+# Single
+ans3r <- mmer(Yield ~ 1,
+              random= ~ vsr(id),
+              rcov= ~ vsr(units),
+              data=DT, verbose = FALSE)
+summary(ans3r)$varcomp
+ans3r$sigma$`u:id`
+#Multi
+ans4r <- mmer(cbind(Yield, FruitAver) ~ 1,
+              random= ~ vsr(id, Gtc=unsm(2)),
+              rcov= ~ vsr(units, Gtc=diag(2)),
+              data=DT, verbose = FALSE)
+summary(ans4r)$varcomp
+ans4r$sigma$`u:id`
+# Single + G
+ans3r <- mmer(Yield ~ 1,
+              random= ~ vsr(id, Gu=G),
+              rcov= ~ vsr(units),
+              data=DT, verbose = FALSE)
+summary(ans3r)$varcomp
+ans3r$sigma$`u:id`
+#Multi + G
+ans4r <- mmer(cbind(Yield, FruitAver) ~ 1,
+              random= ~ vsr(id, Gu=G, Gtc=unsm(2)),
+              rcov= ~ vsr(units, Gtc=diag(2)),
+              data=DT, verbose = FALSE)
+summary(ans4r)$varcomp
+ans4r$sigma$`u:id`
+#################################################################################
+# Cross-validation Multi-trait models (GBLUP) using sommer: Scenario MT-1
+#30 Replicates
+rep <- 3
+#5 random partitions
+fold <- 5
+n <- dim(data.1.2)[1]
+Replicates <- data.frame(Replicate = 1:rep,MSEP_T1 = NA,Cor_T1 = NA,
+                         MSEP_T2 = NA,Cor_T2 = NA) 
+
+for (j in 1:rep){ 
+  set.seed(j)
+  Partitions <- replicate(fold,sample(n,0.20*n,replace = F))
+  Table <- data.frame(Partitions = 1:fold,MSEP_T1 = NA,Cor_T1 = NA,
+                      MSEP_T2 = NA,Cor_T2 = NA)
+  for(i in 1:fold) {
+    tst <- Partitions[,i]
+    data.1.2$y_NA.1 <- data.1.2$Yield
+    data.1.2$y_NA.1[tst] <- NA
+    data.1.2$y_NA.2 <- data.1.2$FruitAver
+    data.1.2$y_NA.2[tst] <- NA
+    #Fit model
+    fit <- mmer(cbind(y_NA.1,y_NA.2)~ 1,
+                random= ~ vsr(id, Gu=G,Gtc=unsm(2)),
+                rcov= ~ vsr(units,Gtc=diag(2)), data=data.1.2,
+                verbose=F, method = "AI")
+    #BLUPs
+    b_ls <- fit$U$`u:id`
+    b_T1 <- b_ls$y_NA.1 # Trait 1
+    b_T2 <- b_ls$y_NA.2 # Trait 2
+    b_mat <- cbind(b_T1,b_T2)
+    #Prediction of testing for both traits
+    yp_tst = b_mat[tst,1] # Trait 1
+    y2p_tst = b_mat[tst,2] # Trait 2
+    #MSEP and Cor
+    #Trait 1
+    Table$MSEP_T1[i] <- mean((data.1.2$Yield[tst]-yp_tst)^2)
+    Table$Cor_T1[i] <- cor(data.1.2$Yield[tst],yp_tst)
+    #Trait 2
+    Table$MSEP_T2[i] <- mean((data.1.2$FruitAver[tst]-y2p_tst)^2)
+    Table$Cor_T2[i] <- cor(data.1.2$FruitAver[tst],y2p_tst)
+  }
+  Replicates$MSEP_T1[j] <- mean(na.omit(Table$MSEP_T1))
+  Replicates$Cor_T1[j] <-mean(na.omit(Table$Cor_T1))
+  Replicates$MSEP_T2[j] <- mean(na.omit(Table$MSEP_T2))
+  Replicates$Cor_T2[j] <-mean(na.omit(Table$Cor_T2))
+}
+
+mean(Replicates$MSEP_T1)
+mean(Replicates$Cor_T1)
+mean(Replicates$MSEP_T2)
+mean(Replicates$Cor_T2)
