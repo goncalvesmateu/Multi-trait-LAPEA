@@ -236,7 +236,7 @@ abline(v=10, col="black", lwd = 2, lty = 2)
 
 ## Independent culling levels {style="font-size: 90%;"}
 
-A certain level of merit (minimun level of performance) is established for each trait, and all individuals below that level are discarded regardless of values for other traits.
+A certain level of merit (minimun level of performance) for individuals is established for each trait, and all individuals below that level are discarded regardless of values for other traits.
 
 ```{r fig.align='center', fig.cap="", fig.height = 6}
 #| echo: true
