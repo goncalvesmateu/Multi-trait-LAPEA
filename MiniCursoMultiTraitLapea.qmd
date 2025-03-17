@@ -83,9 +83,9 @@ editor: visual
 ![**Fig 1**. *Model or ideal plant (IDEOTYPE) with attributes combined to maximize yield* <br> [@furbank2019field].](Images\ideotypeWheat.png){fig-align="left"}
 :::
 
-## Correlation between traits {style="font-size: 90%;"}
+## Correlation between traits {style="font-size: 80%;"}
 
-::: {style="font-size: 77%;"}
+::: {style="font-size: 85%;"}
 - [Phenotypic correlation]{style="color:red"}: linear association between the phenotypic values of two traits.
 
 - [Genetic correlation]{style="color:red"}: linear association between the genetic (breeding) values of two traits. 
@@ -166,10 +166,11 @@ ${\sigma_a}$: is the standard deviation of breeding values.
 
 ## Correlated response to selection
 
-- [Correlated response to selection]{style="color:red"}: selection for one trait will cause a correlated response in the other (if genetic correlation exists). The expected response of a trait Y, when selection is applied to another trait X:
+- [Correlated response to selection]{style="color:red"}: selection for one trait will cause a correlated response in the other (if genetic correlation exists). The expected response for a trait Y, when selection is applied to another trait X:
 
 $$CR_{Y} = {k}_{p} {h}_{x} {h}_{y}{r}_{g}\sigma_{p_{Y}}$$
-- Indirect selection is expected to be better than direct selection if the secondary trait has substantially higher heritability, and the genetic correlation is high.
+
+- [Indirect selection is expected to be better than direct selection if the secondary trait has substantially higher heritability, and the genetic correlation is high.]{style="color:red"}
 
 - Indirect selection can also be advantageous if much larger population sizes are possible compared to direct selection. Also, if secondary trait is easier and/or cheaper to evaluate, and measurable on both sex for example.
 
@@ -445,85 +446,6 @@ y_{i} = X_{i}b_{i} + Z_{i}u_{i} + e_{i} , & i = 1, 2,.. trait
 :::
 
 :::
-
-## Hands-on using R
-
-``` tex
-# rrBLUB (single-trait and no marker information used)
-
-# GBLUP (single-trait with marker information used)
-
-################################################################################
-################################################################################
-# Cross-validation Single-trait models (rrBLUP) using sommer
-# Datasets
-data(DT_cpdata)
-# Phenotypic data
-DT <- DT_cpdata
-head(DT)
-# Removing rows with NAS because is preventing correlation in corss validation 
-DT <- na.omit(DT)
-# Marker data
-GT <- GT_cpdata
-GT_cpdata[1:5,1:5]
-# Chromossome positions
-#MP <- MP_cpdata
-#head(MP_cpdata)
-# Genomic relationship matrix
-A <- A.mat(GT)
-colnames(A) <- rownames(A) <- rownames(DT)
-A[1:5,1:5]
-# Creating new dataset
-data.1.2 <- DT
-# Scaling phenotypes
-data.1.2$Yield <- as.vector(scale(data.1.2$Yield, center = T, scale = T)) # Yield
-data.1.2$FruitAver <- as.vector(scale(data.1.2$FruitAver, center = T, scale = T)) # fruit avarage
-data.1.2$Firmness <- as.vector(scale(data.1.2$Firmness, center = T, scale = T)) # firmness
-data.1.2$color <- as.vector(scale(data.1.2$color, center = T, scale = T)) # color
-######################################################################################
-# Cross-validation Single-trait models (GBLUP) using sommer
-#30 Replicates
-rep <- 3
-#5 random partitions
-fold <- 5
-n <- dim(data.1.2)[1]
-Replicates <- data.frame(Replicate = 1:rep,MSEP = NA,Cor = NA) 
-for (j in 1:rep){ 
-  set.seed(j)
-  Partitions <- replicate(fold,sample(n,0.20*n,replace = F))
-  Table <- data.frame(Partitions = 1:fold,MSEP = NA,Cor = NA)
-  for(i in 1:fold) {
-    tst <- Partitions[,i]
-    data.1.2$y_NA <- data.1.2$Yield
-    data.1.2$y_NA[tst] <- NA
-    #M1
-    fit = mmer(y_NA ~ 1,
-         random=~vsr(id,Gu=A) + vsr(Rowf),
-         rcov=~units,
-         data=data.1.2,verbose = FALSE)
-    #BLUPs
-    bv <- fit$U$`u:id`$y_NA
-    #Prediction of testing
-    yp_tst <- bv[tst]
-    #MSEP and Cor
-    Table$MSEP[i] <- mean((data.1.2$Yield[tst]-yp_tst)^2)
-    Table$Cor[i] <- cor(data.1.2$Yield[tst],yp_tst)
-  }
-  Replicates$MSEP[j] <- mean((na.omit(Table$MSEP))) # mean of folds
-  Replicates$Cor[j] <-mean((na.omit(Table$Cor))) # mean of folds
-}
-
-mean(Replicates$MSEP) # mean of replicates
-mean(Replicates$Cor) # mean of replicates
-######################################################################################
-
-# rrBLUP (multi-trait and no marker information used)
-
-# GBLUP (multi-trait with marker information used)
-
-
-
-```
 
 
 ## References
